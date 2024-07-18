@@ -5,11 +5,11 @@ import { RegisterUser } from "../calls/users";
 
 function Register() {
   const onFinish = async (values) => {
-    console.log(values);
     try {
       const response = await RegisterUser(values);
       if (response.success) {
         message.success(response.message);
+        navigate("/login"); // Redirect to login after successful registration
       } else {
         message.error(response.message);
       }
@@ -46,8 +46,8 @@ function Register() {
                   id="name"
                   type="text"
                   placeholder="Enter your name"
-                  rules={[{ required: true, message: "Email is required!" }]}
-                ></Input>
+                  rules={[{ required: true, message: "Name is required!" }]}
+                />
               </Form.Item>
               <Form.Item
                 label="Email"
@@ -56,11 +56,7 @@ function Register() {
                 className="d-block"
                 rules={[{ required: true, message: "Email is required!" }]}
               >
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                ></Input>
+                <Input id="email" type="email" placeholder="Enter your email" />
               </Form.Item>
               <Form.Item
                 label="Password"
@@ -73,7 +69,23 @@ function Register() {
                   id="password"
                   type="password"
                   placeholder="Enter the password"
-                ></Input>
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Register as a Partner"
+                htmlFor="role"
+                name="role"
+                className="d-block text-center"
+                initialValue="user" // Default to 'user'
+                rules={[
+                  { required: true, message: "Please select an option!" },
+                ]}
+              >
+                <Radio.Group name="radiogroup" className="flex-start">
+                  <Radio value="partner">Yes</Radio>
+                  <Radio value="user">No</Radio>
+                </Radio.Group>
               </Form.Item>
 
               <Form.Item>
@@ -85,24 +97,6 @@ function Register() {
                 >
                   Sign Up
                 </Button>
-              </Form.Item>
-              <Form.Item
-                label="Register as a Partner"
-                htmlFor="role"
-                name="role"
-                className="d-block text-center"
-                initialValue={false}
-                rules={[{ required: true, message: "Please select an option!" }]}
-              >
-                <div className="d-flex justify-content-start">
-                  <Radio.Group
-                    name="radiogroup"
-                    className="flex-start"
-                  >
-                    <Radio value={'partner'}>Yes</Radio>
-                    <Radio value={'user'}>No</Radio>
-                  </Radio.Group>
-                </div>
               </Form.Item>
             </Form>
             <div>
