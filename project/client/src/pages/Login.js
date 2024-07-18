@@ -1,30 +1,40 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginUser } from '../calls/users';
+import { LoginUser } from "../calls/users";
 
 function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if(localStorage.getItem('token')){
-        navigate("/");
+    if (localStorage.getItem("token")) {
+      navigate("/");
     }
-  }, [navigate]); 
+  }, [navigate]);
 
   const onFinish = async (values) => {
     try {
       const response = await LoginUser(values);
       if (response.success) {
         message.success(response.message);
-        localStorage.setItem('token', response.token);
-        navigate('/');
+        localStorage.setItem("token", response.token);
+        navigate("/");
       } else {
         message.error(response.message);
       }
     } catch (error) {
       message.error(error.message);
     }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   return (
@@ -44,7 +54,13 @@ function Login() {
                 className="d-block"
                 rules={[{ required: true, message: "Email is required" }]}
               >
-                <Input id="email" type="text" placeholder="Enter your Email" />
+                <Input
+                  id="email"
+                  type="text"
+                  placeholder="Enter your Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
               </Form.Item>
 
               <Form.Item
@@ -54,11 +70,22 @@ function Login() {
                 className="d-block"
                 rules={[{ required: true, message: "Password is required" }]}
               >
-                <Input id="password" type="password" placeholder="Enter your Password" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your Password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
               </Form.Item>
 
               <Form.Item className="d-block">
-                <Button type="primary" block htmlType="submit" style={{ fontSize: "1rem", fontWeight: "600" }}>
+                <Button
+                  type="primary"
+                  block
+                  htmlType="submit"
+                  style={{ fontSize: "1rem", fontWeight: "600" }}
+                >
                   Login
                 </Button>
               </Form.Item>
